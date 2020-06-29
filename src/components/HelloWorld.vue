@@ -1,59 +1,174 @@
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-router" target="_blank" rel="noopener">router</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-vuex" target="_blank" rel="noopener">vuex</a></li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
-  </div>
+  <v-container>
+    <v-row class="text-center" >
+      <v-col class="mb-12">
+  <v-card
+    class="mx-auto "
+  >
+    <v-list-item>
+      <v-list-item-content>
+        <v-list-item-title class="headline">Gastos</v-list-item-title>
+        <v-list-item-subtitle>Mi cuenta</v-list-item-subtitle>
+      </v-list-item-content>
+    </v-list-item>
+
+       <v-list >
+
+         <v-list-item>
+         
+        <v-list-item-content>
+          <v-list-item-title class='lista-header' >Descripcion</v-list-item-title>
+        </v-list-item-content>
+
+         <v-list-item-content>
+          <v-list-item-title class='lista-header' >fecha</v-list-item-title>
+        </v-list-item-content>
+
+         <v-list-item-content>
+          <v-list-item-title class='lista-header'  >monto</v-list-item-title>
+        </v-list-item-content>
+
+         <v-list-item-content>
+          <v-list-item-title class='lista-header' >motivo</v-list-item-title>
+        </v-list-item-content>
+
+          
+      </v-list-item>
+
+ <v-dialog v-model="dialogEdit" persistent max-width="600px">
+   <template  v-slot:activator="{ on, attrs }">
+      <v-list-item
+        
+        v-for="item in items"
+        :key="item.mId"
+       
+        v-bind="attrs"
+        v-on="on"
+       
+        
+      >
+       
+        <v-list-item-content>
+          <v-list-item-title v-text="item.descripcion"></v-list-item-title>
+        </v-list-item-content>
+
+         <v-list-item-content>
+          <v-list-item-title v-text="item.fecha"></v-list-item-title>
+        </v-list-item-content>
+
+         <v-list-item-content>
+          <v-list-item-title v-text="item.monto"></v-list-item-title>
+        </v-list-item-content>
+
+         <v-list-item-content>
+          <v-list-item-title v-text="item.motivo"></v-list-item-title>
+        </v-list-item-content>
+   
+      </v-list-item>
+      </template>
+       <modal-movimiento class='md-2' :itemsPadre="items" @masMovimientos="actualizaItems" :accion='agregar' />
+      </v-dialog>
+    </v-list>
+    <v-card-actions>
+
+      <v-dialog v-model="dialog" persistent max-width="600px">
+      <template  v-slot:activator="{ on, attrs }">
+        <v-btn
+          text
+          color="deep-purple accent-4"
+          v-bind="attrs"
+          v-on="on"
+          
+        >
+          agregar
+        </v-btn>
+      </template>
+       <modal-movimiento class='md-2' :itemsPadre="items" @masMovimientos="actualizaItems" :accion='agregar' />
+      </v-dialog>
+  
+      
+      
+
+
+      <v-dialog v-model="dialog2" persistent max-width="600px">
+      <template  v-slot:activator="{ on, attrs }">
+        <v-btn
+          text
+          color="deep-purple accent-4"
+          v-bind="attrs"
+          v-on="on"
+          
+        >
+          editar
+        </v-btn>
+      </template>
+      <modal-movimiento></modal-movimiento>
+      </v-dialog>
+   
+
+    </v-card-actions>
+  </v-card>
+
+ <!-- modal --> 
+  <!-- modal --> 
+   <!-- modal --> 
+    <!-- modal --> 
+
+
+
+
+
+
+
+</v-col>
+ 
+
+    </v-row>
+  </v-container>
 </template>
 
 <script>
-export default {
-  name: 'HelloWorld',
-  props: {
-    msg: String
+import ModalMovimiento from './ModalMovimiento.vue'
+  export default {
+    name: 'HelloWorld',
+    components: {
+      ModalMovimiento,
+    },
+    methods: {
+      actualizaItems(movimientos){
+        console.log('recibe')
+        this.items = movimientos
+         this.dialog=false
+      },
+      cierraDialogPadre(){
+        console.log(this.dialog)
+        this.dialog=false
+      },
+    
+    },
+
+    data: () => ({
+        dialog: false,
+        dialog2:false,
+        dialogEdit:false,
+        items: [
+          { mId:'1', descripcion:"unas papas",fecha:"01-06-1990",monto:"500",motivo:"por que si"},
+          { mId:'2', descripcion:"otras papas",fecha:"01-06-1990",monto:"600",motivo:"asdaf"},
+          { mId:'3', descripcion:"uber",fecha:"01-06-1990",monto:"7000",motivo:"     "},
+          { mId:'4', descripcion:"Mcdonals",fecha:"01-06-1990",monto:"8000",motivo:""},
+          { mId:'5',descripcion:"chelas",fecha:"01-06-1990",monto:"13000",motivo:"sed"},
+        ],
+        editar: 'editar',
+        agregar: 'agregar',
+    
+    }),
   }
-}
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
+  .lista-header{
+    font-weight: bolder;
+    color:black;
+
+  }
 </style>
